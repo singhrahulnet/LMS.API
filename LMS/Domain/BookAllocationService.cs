@@ -77,8 +77,7 @@ namespace LMS.Domain
             issuedBookDetail.ReturnDate = issuedBookDetail.ReturnDate.AddDays(days);
             issuedBookDetail.ReturnDateExtended = true;
             _mgr.Create<IssuedBook>().Update(issuedBookDetail);
-            _mgr.Save();
-            return true;
+            return _mgr.Save() == 1 ? true : false;
         }
         #endregion
     }
