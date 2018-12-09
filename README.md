@@ -1,7 +1,7 @@
 # LMS.API Demo  ![GitHub release](https://img.shields.io/github/release/singhrahulnet/lms.api.svg?style=for-the-badge) ![Maintenance](https://img.shields.io/maintenance/yes/2018.svg?style=for-the-badge)
 
-![GitHub Release Date](https://img.shields.io/github/release-date/singhrahulnet/lms.api.svg?style=plastic) |[![.Net Framework](https://img.shields.io/badge/DotNet-Framework_2.1-blue.svg?style=plastic)](https://www.microsoft.com/net/download/dotnet-core/2.1) | ![GitHub language count](https://img.shields.io/github/languages/count/singhrahulnet/lms.api.svg?style=plastic)| ![GitHub top language](https://img.shields.io/github/languages/top/singhrahulnet/lms.api.svg) |![GitHub repo size in bytes](https://img.shields.io/github/repo-size/singhrahulnet/lms.api.svg) 
-| ---        | ---      | ---       | --- | --- |
+![GitHub Release Date](https://img.shields.io/github/release-date/singhrahulnet/lms.api.svg?style=plastic) |[![.Net Framework](https://img.shields.io/badge/DotNet-Framework_2.1-blue.svg?style=plastic)](https://www.microsoft.com/net/download/dotnet-core/2.1) | ![GitHub language count](https://img.shields.io/github/languages/count/singhrahulnet/lms.api.svg?style=plastic)| ![GitHub top language](https://img.shields.io/github/languages/top/singhrahulnet/lms.api.svg) 
+| ---        | ---      | ---       | --- |
 
 
 #### LMS.API is a webapi that serves the below 4 functions
