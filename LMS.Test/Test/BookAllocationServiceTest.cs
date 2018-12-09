@@ -60,6 +60,7 @@ namespace LMS.Test.Test
             int InputBookId = TestData.IssuedBooks.Where(i => i.IssuedBookId == randomIssuedBookId).First().BookId;
             Book InputBook = TestData.Books.Where(b => b.BookId == InputBookId).First();
             moqTxnMgr.Setup(m => m.Create<IssuedBook>().Update(It.IsAny<IssuedBook>())).Verifiable();
+            moqTxnMgr.Setup(m => m.Save()).Returns(1);
 
             var sut = new BookAllocationService(moqTxnMgr.Object);
 
@@ -71,6 +72,7 @@ namespace LMS.Test.Test
             Assert.IsTrue(result);
             moqTxnMgr.Verify(v => v.Create<IssuedBook>().Get(), Times.Once);
             moqTxnMgr.Verify(v => v.Create<IssuedBook>().Update(It.IsAny<IssuedBook>()), Times.Once);
+            moqTxnMgr.Verify(v => v.Save(), Times.Once);
         }
     }
 }
