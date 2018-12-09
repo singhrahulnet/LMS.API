@@ -11,7 +11,7 @@
     > issue book to a student
     > extend return date of a book
 
-<img width="1469" alt="lms webapi" src="https://github.com/singhrahulnet/lms/blob/master/swagger.png">
+<img width="1469" alt="lms webapi" src="https://github.com/singhrahulnet/lms.api/blob/master/swagger.png">
 
 #### Repository projects details
 
