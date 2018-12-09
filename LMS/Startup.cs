@@ -38,8 +38,8 @@ namespace LMS
                     Contact = new Contact
                     {
                         Name = "Rahul",
-                        Email = "rahul@email.com",
-                        Url = "https://github.com/rahul"
+                        Email = "singh.rahul.net@gmail.com",
+                        Url = "https://github.com/singhrahulnet"
                     }
                 });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
