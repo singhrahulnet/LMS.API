@@ -40,7 +40,7 @@ namespace LMS.Test
             //given
             moqBookService.Setup(m => m.GetAllBooks()).Returns(TestData.Books);
 
-            var sut = new BookStoreService(moqStudentService.Object,moqBookService.Object,moqBookAllocationService.Object);
+            var sut = new BookStoreService(moqStudentService.Object, moqBookService.Object, moqBookAllocationService.Object);
 
             //when
             var result = sut.GetAllBooks();
@@ -55,7 +55,7 @@ namespace LMS.Test
         public void get_overdue_books_returns_all_books_which_are_overdue()
         {
             //given
-            var overDueBooksId = TestData.IssuedBooks.Where(i => DateTime.Now.Subtract(i.ReturnDate).Days > 0).Select(s=>s.BookId).ToList();
+            var overDueBooksId = TestData.IssuedBooks.Where(i => DateTime.Now.Subtract(i.ReturnDate).Days > 0).Select(s => s.BookId).ToList();
             var overDueBooks = TestData.Books.Where(b => overDueBooksId.Contains(b.BookId));
 
             moqBookService.Setup(m => m.GetOverdueBooks()).Returns(overDueBooks);
@@ -74,76 +74,86 @@ namespace LMS.Test
         {
             //given
             int randomStudentId = rnd.Next(1, TestData.Students.Count);
-            int studentId = TestData.Students.Where(s => s.StudentId == randomStudentId).First().StudentId;
-            int randomBookId = rnd.Next(1, TestData.Books.Count);
-            int bookId = TestData.Books.Where(s => s.BookId == randomBookId).First().BookId;
+            var student = TestData.Students.Where(s => s.StudentId == randomStudentId).First();
+            int randomBookId = rnd.Next(TestData.IssuedBooks.Count + 1, TestData.Books.Count);
+            var book = TestData.Books.Where(s => s.BookId == randomBookId).First();
+            moqStudentService.Setup(m => m.GetStudent(It.IsAny<int>())).Returns(student);
+            moqBookService.Setup(m => m.GetBook(It.IsAny<int>())).Returns(book);
             moqBookAllocationService.Setup(m => m.IssueBook(It.IsAny<Student>(), It.IsAny<Book>())).Returns(true);
+
             var sut = new BookStoreService(moqStudentService.Object, moqBookService.Object, moqBookAllocationService.Object);
 
             //when
-            var result = sut.IssueBook(studentId, bookId);
+            var result = sut.IssueBook(student.StudentId, book.BookId);
 
             //then
             Assert.IsInstanceOfType(result, typeof(bool));
             Assert.IsTrue(result);
-            moqBookAllocationService.Verify(v => v.IssueBook(It.IsAny<Student>(),It.IsAny<Book>()), Times.Once);
+            moqStudentService.Verify(v => v.GetStudent(It.IsAny<int>()), Times.Once);
+            moqBookService.Verify(v => v.GetBook(It.IsAny<int>()), Times.Once);
+            moqBookAllocationService.Verify(v => v.IssueBook(It.IsAny<Student>(), It.IsAny<Book>()), Times.Once);
         }
         [TestMethod]
         public void issue_book_does_not_issue_book_to_student()
         {
             //given
             int randomStudentId = rnd.Next(1, TestData.Students.Count);
-            int studentId = TestData.Students.Where(s => s.StudentId == randomStudentId).First().StudentId;
-            int randomBookId = rnd.Next(1, TestData.Books.Count);
-            int bookId = TestData.Books.Where(s => s.BookId == randomBookId).First().BookId;
-            moqBookAllocationService.Setup(m => m.IssueBook(It.IsAny<Student>(), It.IsAny<Book>())).Returns(false);
+            var student = TestData.Students.Where(s => s.StudentId == randomStudentId).First();
+            int randomBookId = rnd.Next(1, TestData.IssuedBooks.Count);
+            var book = TestData.Books.Where(s => s.BookId == randomBookId).First();
+            moqStudentService.Setup(m => m.GetStudent(It.IsAny<int>())).Returns(student);
+            moqBookService.Setup(m => m.GetBook(It.IsAny<int>())).Returns(book);
             var sut = new BookStoreService(moqStudentService.Object, moqBookService.Object, moqBookAllocationService.Object);
 
             //when
-            var result = sut.IssueBook(studentId,bookId);
+            var result = sut.IssueBook(student.StudentId, book.BookId);
 
             //then
             Assert.IsInstanceOfType(result, typeof(bool));
             Assert.IsFalse(result);
-            moqBookAllocationService.Verify(v => v.IssueBook(It.IsAny<Student>(), It.IsAny<Book>()), Times.Once);
+            moqStudentService.Verify(v => v.GetStudent(It.IsAny<int>()), Times.Once);
+            moqBookService.Verify(v => v.GetBook(It.IsAny<int>()), Times.Once);
         }
+
         [TestMethod]
         public void extend_date_extends_book_return_date()
         {
             //given
-            int randomBookId = rnd.Next(1, TestData.Books.Count);
-            int bookId = TestData.Books.Where(s => s.BookId == randomBookId).First().BookId;
-            moqBookAllocationService.Setup(m => m.ExtendReturndate(It.IsAny<Book>(), It.IsAny<int>())).Returns(true);
+            int randomBookId = rnd.Next(1, TestData.IssuedBooks.Count);
+            var issuedBook = TestData.IssuedBooks.Where(s => s.BookId == randomBookId);
+            moqBookService.Setup(m => m.GetIssuedBooks()).Returns(issuedBook);
+            moqBookAllocationService.Setup(m => m.ExtendReturndate(It.IsAny<IssuedBook>(), It.IsAny<int>())).Returns(true);
             var sut = new BookStoreService(moqStudentService.Object, moqBookService.Object, moqBookAllocationService.Object);
 
             //when
-            var result = sut.ExtendReturnDate(bookId, rnd.Next(1,10));
+            var result = sut.ExtendReturnDate(issuedBook.First().BookId, rnd.Next(1, 10));
 
             //then
             Assert.IsInstanceOfType(result, typeof(bool));
             Assert.IsTrue(result);
-            moqBookService.Verify(v => v.GetBook(It.IsAny<int>()), Times.Once);
-            moqBookAllocationService.Verify(v => v.ExtendReturndate(It.IsAny<Book>(), It.IsAny<int>()), Times.Once);
+            moqBookService.Verify(v => v.GetIssuedBooks(), Times.Once);
+            moqBookAllocationService.Verify(v => v.ExtendReturndate(It.IsAny<IssuedBook>(), It.IsAny<int>()), Times.Once);
 
         }
         [TestMethod]
         public void extend_date_does_not_extends_book_return_date()
         {
             //given
-            int randomBookId = rnd.Next(1, TestData.Books.Count);
-            int bookId = TestData.Books.Where(s => s.BookId == randomBookId).First().BookId;
+            int randomBookId = rnd.Next(1, TestData.IssuedBooks.Count);
+            var issuedBook = TestData.IssuedBooks.Where(s => s.BookId == randomBookId);
+            moqBookService.Setup(m => m.GetIssuedBooks()).Returns(issuedBook);
 
-            moqBookAllocationService.Setup(m => m.ExtendReturndate(It.IsAny<Book>(), It.IsAny<int>())).Returns(false);
+            moqBookAllocationService.Setup(m => m.ExtendReturndate(It.IsAny<IssuedBook>(), It.IsAny<int>())).Returns(false);
             var sut = new BookStoreService(moqStudentService.Object, moqBookService.Object, moqBookAllocationService.Object);
 
             //when
-            var result = sut.ExtendReturnDate(bookId, rnd.Next(1, 10));
+            var result = sut.ExtendReturnDate(issuedBook.First().BookId, rnd.Next(1, 10));
 
             //then
             Assert.IsInstanceOfType(result, typeof(bool));
             Assert.IsFalse(result);
-            moqBookService.Verify(v => v.GetBook(It.IsAny<int>()), Times.Once);
-            moqBookAllocationService.Verify(v => v.ExtendReturndate(It.IsAny<Book>(), It.IsAny<int>()), Times.Once);
+            moqBookService.Verify(v => v.GetIssuedBooks(), Times.Once);
+            moqBookAllocationService.Verify(v => v.ExtendReturndate(It.IsAny<IssuedBook>(), It.IsAny<int>()), Times.Once);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace LMS.Test.Test
             //given
             int randomIssuedBookId = rnd.Next(1,TestData.IssuedBooks.Count);
             int InputBookId = TestData.IssuedBooks.Where(i => i.IssuedBookId == randomIssuedBookId).First().BookId;
-            Book InputBook = TestData.Books.Where(b => b.BookId == InputBookId).First();
+            IssuedBook InputBook = TestData.IssuedBooks.Where(b => b.BookId == InputBookId).First();
             moqTxnMgr.Setup(m => m.Create<IssuedBook>().Update(It.IsAny<IssuedBook>())).Verifiable();
             moqTxnMgr.Setup(m => m.Save()).Returns(1);
 
@@ -70,7 +70,6 @@ namespace LMS.Test.Test
             //then
             Assert.IsInstanceOfType(result, typeof(bool));
             Assert.IsTrue(result);
-            moqTxnMgr.Verify(v => v.Create<IssuedBook>().Get(), Times.Once);
             moqTxnMgr.Verify(v => v.Create<IssuedBook>().Update(It.IsAny<IssuedBook>()), Times.Once);
             moqTxnMgr.Verify(v => v.Save(), Times.Once);
         }

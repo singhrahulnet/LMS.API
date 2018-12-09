@@ -11,6 +11,7 @@ namespace LMS.Domain
         IEnumerable<Book> GetAllBooks();
         Book GetBook(int bookId);
         IEnumerable<Book> GetOverdueBooks();
+        IEnumerable<IssuedBook> GetIssuedBooks();
     }
     public class BookService : IBookService
     {
@@ -36,14 +37,12 @@ namespace LMS.Domain
 
         public Book GetBook(int bookId)
         {
-            if(bookId==0)
+            if (bookId == 0)
                 throw new Exception("no bookId ");
             Book book = null;
             try
             {
                 book = _mgr.Create<Book>().GetById(bookId);
-                if (book == null)
-                    throw new Exception("book with ID '" + bookId + "' not found");
             }
             catch (Exception)
             {
@@ -59,8 +58,22 @@ namespace LMS.Domain
             try
             {
                 var issuedBooks = _mgr.Create<IssuedBook>().Get();
-                var issuedOverdueBooksId= issuedBooks.Where(i =>DateTime.Now.Subtract(i.ReturnDate).Days>0).Select(o => o.BookId);
+                var issuedOverdueBooksId = issuedBooks.Where(i => DateTime.Now.Subtract(i.ReturnDate).Days > 0).Select(o => o.BookId);
                 books = _mgr.Create<Book>().Get().Where(b => issuedOverdueBooksId.Contains(b.BookId));
+            }
+            catch (Exception)
+            {
+                //shout/catch/throw/log
+            }
+            return books;
+        }
+        public IEnumerable<IssuedBook> GetIssuedBooks()
+        {
+            IEnumerable<IssuedBook> books = null;
+            try
+            {
+                books = _mgr.Create<IssuedBook>().Get();
+
             }
             catch (Exception)
             {

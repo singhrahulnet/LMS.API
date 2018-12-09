@@ -24,6 +24,7 @@ namespace LMS.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<Book>))]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public IActionResult GetBooks()
         {
             try
@@ -44,8 +45,8 @@ namespace LMS.Controllers
         [HttpGet]
         [Route("overduebooks")]
         [ProducesResponseType(200, Type = typeof(List<Book>))]
-        [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public IActionResult GetOverDueBooks()
         {
             try
@@ -70,7 +71,7 @@ namespace LMS.Controllers
         [Route("issue/studentId/{studentId}/bookId/{bookId}")]
         [ProducesResponseType(200, Type = typeof(bool))]
         [ProducesResponseType(400)]
-        public IActionResult AssignBook(int studentId, int bookId)
+        public IActionResult IssueBook(int studentId, int bookId)
         {
             if (!ModelState.IsValid || studentId == 0 || bookId == 0)
                 return BadRequest(ModelState);
@@ -94,7 +95,6 @@ namespace LMS.Controllers
         [HttpPut]
         [Route("extend/bookId/{bookId}/days/{days}")]
         [ProducesResponseType(200, Type = typeof(bool))]
-        [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         public IActionResult ExtendBook(int bookId, int days)
         {

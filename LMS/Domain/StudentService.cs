@@ -22,8 +22,7 @@ namespace LMS.Domain
                 throw new Exception("no studentId found");
 
             var student = _mgr.Create<Student>().GetById(studentId);
-            if (student == null)
-                throw new Exception("Student with ID '" + studentId + "' not found");
+            
             return student;
         }
     }

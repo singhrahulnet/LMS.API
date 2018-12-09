@@ -1,6 +1,7 @@
 ﻿using LMS.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LMS.Domain
 {
@@ -9,14 +10,14 @@ namespace LMS.Domain
         IEnumerable<Book> GetAllBooks();
         IEnumerable<Book> GetOverdueBooks();
         bool IssueBook(int studentId, int bookId);
-        bool ExtendReturnDate(int bookId,int days);
+        bool ExtendReturnDate(int bookId, int days);
     }
     public class BookStoreService : IBookStoreService
     {
         IStudentService _studentService;
         IBookService _bookService;
         IBookAllocationService _bookallocationService;
-        public BookStoreService(IStudentService studentService,IBookService bookService, IBookAllocationService bookAllocationService)
+        public BookStoreService(IStudentService studentService, IBookService bookService, IBookAllocationService bookAllocationService)
         {
             _studentService = studentService;
             _bookService = bookService;
@@ -52,31 +53,37 @@ namespace LMS.Domain
         {
             //always validate the inputs at entry
             if (studentId == 0 || bookId == 0)
-                throw new Exception("no studentId/bookid found"); 
+                throw new Exception("no studentId/bookid found");
 
-            bool bookAssigned = false;
+            bool bookissued = false;
+
+            var student = _studentService.GetStudent(studentId);
+            if (student == null) throw new Exception("Student not found");
+            var book = _bookService.GetBook(bookId);
+            if (book == null) throw new Exception("Book not found");
 
             try
             {
-                bookAssigned = Issue(studentId, bookId);
+                return _bookallocationService.IssueBook(student, book);
             }
             catch (Exception)
             {
                 //shout/catch/throw/log
             }
-            return bookAssigned;
+            return bookissued;
         }
         public bool ExtendReturnDate(int bookId, int days)
         {
-            if(bookId==0 || days==0)
+            if (bookId == 0 || days == 0)
                 throw new Exception("no bookid found/extend return day is 0");
             bool extended = false;
             try
             {
-                var book = GetBook(bookId);
-                extended= _bookallocationService.ExtendReturndate(book, days);
+                var book = _bookService.GetIssuedBooks().FirstOrDefault(b => b.BookId == bookId);
+                if (book == null) throw new Exception("book with ID '" + bookId + "' not found");
+                extended = _bookallocationService.ExtendReturndate(book, days);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //shout/catch/throw/log
             }
@@ -84,15 +91,12 @@ namespace LMS.Domain
         }
 
         #region PRIVATE
-        bool Issue(int studentId,int bookId)
-        {
-            var student= _studentService.GetStudent(studentId);
-            var book = GetBook(bookId);
-            return _bookallocationService.IssueBook(student, book);
-        }
+        
         Book GetBook(int bookId)
         {
-            return _bookService.GetBook(bookId);
+            var book = _bookService.GetBook(bookId);
+            if (book == null) throw new Exception("Book not found");
+            return book;
         }
         #endregion
     }
