@@ -4,7 +4,7 @@
 | ---        | ---      | ---       | --- | --- |
 
 
-#### a lms webapi serves the below 4 functions
+#### LMS.API is a webapi that serves the below 4 functions
 
     > get all books
     > get all overdue books
