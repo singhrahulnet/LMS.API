@@ -29,11 +29,22 @@
 
 >   Kindly clone /download the repository.
 
->   Open the solution file 'LMS.sln' from VisualStudio 2017 Professional
+>   Open the solution file 'LMS.sln' from VisualStudio 2017 **Professional**
+
 
     - Kindly build both the projects within solution file 
     - Run webapi and find all the endpoint details
     - Run the test projects
+***Note: For VS2017 Community Edition:***
+~~~
+Within Solution Explorer => 
+Right Click LMS Project => 
+Select Properties => 
+Goto Build Tab => 
+Within Output Section => 
+XML documentation file: 
+uncheck and the check again the checkbox in order to run the application successfully
+~~~
 ### Support or Contact
 
 Having any trouble? Please read out this [documentation](https://github.com/singhrahulnet/lms.api/blob/master/README.md) or [contact](mailto:singh.rahul.net@gmail.com) and to sort it out.
