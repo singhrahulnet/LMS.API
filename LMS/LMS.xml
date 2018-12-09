@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LMS</name>
+    </assembly>
+    <members>
+        <member name="M:LMS.Controllers.BooksController.GetBooks">
+            <summary>
+            Retrieve all the books.
+            </summary>
+        </member>
+        <member name="M:LMS.Controllers.BooksController.GetOverDueBooks">
+            <summary>
+            Retrieve all the overdue books.
+            </summary>
+        </member>
+        <member name="M:LMS.Controllers.BooksController.AssignBook(System.Int32,System.Int32)">
+            <summary>
+            Issue the book to the student.
+            </summary>
+            <param name="studentId">The studentId of the desired student</param>
+            <param name="bookId">The bookId of the book to be issued</param>
+            <returns>A boolean status</returns>
+        </member>
+        <member name="M:LMS.Controllers.BooksController.ExtendBook(System.Int32,System.Int32)">
+            <summary>
+            Extend the book return date.
+            </summary>
+            <param name="bookId">The bookId of the desired book to extend return date</param>
+            <param name="days">The number of days to extend the return date of the issued book</param>
+            <returns>A boolean status</returns>
+        </member>
+    </members>
+</doc>
