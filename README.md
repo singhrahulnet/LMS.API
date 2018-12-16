@@ -53,7 +53,7 @@ uncheck and the check again the checkbox in order to build the application succe
 > All the 4 APIs can be viewed and checked at the default URL launched
 ### Support or Contact
 
-Having any trouble? Please read out this [documentation](https://github.com/singhrahulnet/lms.api/blob/master/README.md) or [contact](mailto:singh.rahul.net@gmail.com) and to sort it out.
+Having any trouble? Please read out this [documentation](https://github.com/singhrahulnet/lms.api/blob/master/README.md) or [contact](mailto:singh.rahul.net@gmail.com) to sort it out.
 
  [![HitCount](http://hits.dwyl.io/singhrahulnet/lms/projects/1.svg)](http://hits.dwyl.io/singhrahulnet/lms.api/projects/1) | ![GitHub contributors](https://img.shields.io/github/contributors/singhrahulnet/lms.api.svg?style=plastic)|
  | --- | --- |
